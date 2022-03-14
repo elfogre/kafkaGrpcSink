@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package org.elfogre.kafka.api;
+
+service KafkaGrpcSinkApi {
+  rpc EventReceived(EventReceivedRequest) returns (EventReceivedResponse) {}
+}
+
+message EventReceivedRequest {
+  repeated Event events = 1;
+}
+
+message EventReceivedResponse {
+  repeated Result results = 1;
+}
+
+message Event {
+  int64 id = 1;
+  string event_topic_id = 2;
+  bytes event_data = 3;
+}
+
+message Result {
+  enum ResultStatus {
+    OK = 0;
+    RETRY_LATER = 1;
+    DEATH_PILL = 2;
+    DISCARD = 3;
+  }
+  int64 id = 1;
+  string event_topic_id = 2;
+  oneof result_status {
+    OkResult ok_result = 3;
+    RetryLaterResult retry_later_result = 4;
+    DeathPillResult death_pill_result = 5;
+  }
+}
+
+message OkResult {
+
+}
+
+message RetryLaterResult {
+
+}
+
+message DeathPillResult {
+
+}
